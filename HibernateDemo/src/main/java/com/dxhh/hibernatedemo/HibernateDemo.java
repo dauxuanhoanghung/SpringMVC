@@ -5,10 +5,14 @@
 
 package com.dxhh.hibernatedemo;
 
-import com.dxhh.pojo.Category;
+import com.dxhh.pojo.Product;
+import com.dxhh.repository.ProductRepository;
+import com.dxhh.repository.StatsRepository;
+import com.dxhh.repository.impl.ProductRepositoryImpl;
+import com.dxhh.repository.impl.StatsRepositoryImpl;
+import java.util.HashMap;
 import java.util.List;
-import javax.persistence.Query;
-import org.hibernate.Session;
+import java.util.Map;
 
 /**
  *
@@ -17,14 +21,32 @@ import org.hibernate.Session;
 public class HibernateDemo {
 
     public static void main(String[] args) {
-        Session s = HibernateUtils.getFactory().openSession();
-        Query q = s.createQuery("FROM Category");
+        ProductRepository pr = new ProductRepositoryImpl();
+        Map<String, String> params = new HashMap<>();
+        params.put("fromPrice", "11000000");
+        params.put("toPrice", "25000000");
+        List<Product> products = pr.getProducts(params);
+        products.forEach(x -> System.out.printf("%15s - %8.1f - %s\n", x.getName(), x.getPrice(), x.getCategory().getName()));
+        System.out.println("=============================\n\n");
         
-        List<Category> cate = q.getResultList();
-        cate.forEach(c -> {
-            System.out.println(c.getName());
-        });
+        StatsRepository stats = new StatsRepositoryImpl();
+        List<Object[]> res = stats.statsByCategory();
+        for (Object[] x : res) {
+            System.out.printf("%2s - %15s: %s\n", x[0], x[1], x[2]);
+        }
         
-        s.close();
+        System.out.println("=============================\n\n");
+        
+        List<Object[]> rev = stats.statsRevenue(null, null);
+        for (Object[] x : rev) {
+            System.out.printf("%2s - %15s: %,.1f\n", x[0], x[1], x[2]);
+        }
+        
+        System.out.println("=============================\n\n");
+        
+        List<Object[]> top = stats.statsBySelling();
+        for (Object[] x : top) {
+            System.out.printf("%2s - %15s: %s\n", x[0], x[1], x[2]);
+        }
     }
 }
