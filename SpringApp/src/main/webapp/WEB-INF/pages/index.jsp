@@ -14,6 +14,21 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" rel="stylesheet">
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+            }
+            .rating {
+                --mdb-rating-icon-padding: 0.25rem;
+                display: flex;
+                margin: 0;
+                padding: 0;
+            }
+            ul li {
+                list-style: none;
+            }
+        </style>
     </head>
     <body>
         <header>
@@ -49,7 +64,7 @@
                     <div class="col-md-3 col-sm-6 col-xs-12 px-2 py-1">
                         <div class="card">
                             <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                <img src="${p.image}" class="img-fluid"/>
+                                <img src="${p.image}" class="img-fluid px-3 py-1"/>
                                 <a href="#!">
                                     <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                                 </a>
@@ -57,6 +72,25 @@
                             <div class="card-body bg-light">
                                 <h5 class="card-title">${p.name}</h5>
                                 <p class="card-text">${p.price}</p>
+                                <div>
+                                    <ul class="rating" data-mdb-toggle="rating" tabindex="0">
+                                        <li>
+                                            <i class="fa-star fa-sm text-primary far" data-mdb-toggle="tooltip" aria-label="Bad" data-mdb-original-title="Bad"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa-star fa-sm text-primary far" data-mdb-toggle="tooltip" aria-label="Poor" data-mdb-original-title="Poor"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa-star fa-sm text-primary far" data-mdb-toggle="tooltip" aria-label="OK" data-mdb-original-title="OK"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa-star fa-sm text-primary far" data-mdb-toggle="tooltip" aria-label="Good" data-mdb-original-title="Good"></i>
+                                        </li>
+                                        <li>
+                                            <i class="fa-star fa-sm text-primary far" data-mdb-toggle="tooltip" aria-label="Excellent" data-mdb-original-title="Excellent"></i>
+                                        </li>
+                                    </ul>
+                                </div>
                                 <a href="#!" class="btn btn-primary">Xem chi tiết</a>
                                 <a href="#!" class="btn btn-warning ms-auto">Đặt hàng</a>
                             </div>
