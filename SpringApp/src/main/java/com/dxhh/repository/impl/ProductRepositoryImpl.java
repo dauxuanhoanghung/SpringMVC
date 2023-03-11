@@ -1,0 +1,76 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.dxhh.repository.impl;
+
+import com.dxhh.pojo.Product;
+import com.dxhh.repository.ProductRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author admin
+ */
+@Repository
+@Transactional
+public class ProductRepositoryImpl implements ProductRepository {
+
+    @Autowired
+    private LocalSessionFactoryBean sessionFactory;
+
+    @Override
+    public List<Product> getProducts(Map<String, String> params) {
+        Session s = sessionFactory.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Product> q = builder.createQuery(Product.class);
+        Root<Product> root = q.from(Product.class);
+        q.select(root);
+        List<Predicate> predicates = new ArrayList<>();
+
+        //Filter by keyword
+        String kw = params.get("kw");
+        if (kw != null) {
+            Predicate p = builder.like(root.get("name").as(String.class), String.format("%%%s%%", kw));
+            predicates.add(p);
+        }
+
+        // Filter by price
+        String fromPrice = params.get("fromPrice");
+        String toPrice = params.get("toPrice");
+
+        if (fromPrice != null && !fromPrice.isEmpty()) {
+            Predicate p = builder.greaterThanOrEqualTo(root.get("price").as(Double.class),
+                    Double.parseDouble(fromPrice));
+            predicates.add(p);
+        }
+
+        if (toPrice != null && !toPrice.isEmpty()) {
+            Predicate p = builder.lessThanOrEqualTo(root.get("price").as(Double.class), Double.parseDouble(toPrice));
+            predicates.add(p);
+        }
+        
+        String categoryId = params.get("categoryId");
+        if (categoryId != null) {
+            Predicate p = builder.equal(root.get("categoryId"),
+                    Integer.parseInt(categoryId));
+            predicates.add(p);
+        }
+        q.where(predicates.toArray(Predicate[]::new));
+        Query query = s.createQuery(q);
+        return query.getResultList();
+    }
+
+}

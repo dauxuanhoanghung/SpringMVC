@@ -41,19 +41,22 @@
                     <div class="collapse navbar-collapse" id="navbarResponsive">
                         <ul class="navbar-nav me-auto text-purple-500">
                             <c:forEach items="${categories}" var="c">
+                                <c:url value="/" var="url">
+                                    <c:param name="categoryId" value="${c.id}"/>
+                                </c:url>
                                 <li class="nav-item active">
-                                    <a class="nav-link text-purple-500 " href="#">${c.name}</a>
+                                    <a class="nav-link text-purple-500 " href="${url}">${c.name}</a>
                                 </li>
                             </c:forEach>
                         </ul>
                     </div>
                     <div>
-                        <div class="input-group rounded">
-                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                        <form class="input-group rounded">
+                            <input name="kw" type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                             <span class="input-group-text border-0" id="search-addon">
-                                <a type="button"><i class="fas fa-search"></i></a>
+                                <button type="submit"><i class="fas fa-search"></i></button>
                             </span>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </nav>
